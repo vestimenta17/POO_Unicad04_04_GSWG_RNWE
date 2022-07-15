@@ -16,11 +16,22 @@ import java.time.LocalDate;
 public class PropietarioControl {
     private final PropietarioServicio propietarioServicio = new PropietarioServicio();
     
-    public Propietario crear(String [] args){
-        var propietario = new Propietario(Integer.valueOf(args[0]),args[1],
-                LocalDate.parse(args[2]),Integer.valueOf(args[3]),args[4]);
+    public Propietario crear(String [] args) throws RuntimeException{
+        var propietario = new Propietario(this.convertirEntero(args[0]),args[1],
+                LocalDate.parse(args[2]),this.convertirEntero(args[3]),args[4]);
         this.propietarioServicio.crear(propietario);
         return propietario;                                                    
+    }
+    private int convertirEntero(String numero){
+        try
+        {
+            return Integer.valueOf(numero);
+        }catch(NumberFormatException e){
+            throw new RuntimeException("El campo ingresado solamente recibe "
+                    + "números");
+        }catch(Exception e){
+            throw new RuntimeException("Error inesperado");
+        }
     }
     public Propietario buscarPropietario(String arg){
         return this.propietarioServicio.buscarPorId(Integer.valueOf(arg));

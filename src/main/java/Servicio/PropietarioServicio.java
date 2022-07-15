@@ -14,7 +14,13 @@ public class PropietarioServicio implements IPropietarioServicio {
 
     @Override
     public Propietario crear(Propietario propietario) {
-        this.propietarioList.add(propietario);
+        var propietarioBuscado=this.buscarPorId(propietario.getIdPropietario());
+        if(propietarioBuscado==null){
+            this.propietarioList.add(propietario);
+        }else{
+            throw new RuntimeException("El código ingresado ya se encuentra "
+                    + "asignado a: "+propietarioBuscado.getNombrePropietario());
+        }
         return propietario;
     }
 

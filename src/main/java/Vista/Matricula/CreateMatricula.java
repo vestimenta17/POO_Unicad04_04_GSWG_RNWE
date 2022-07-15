@@ -223,15 +223,23 @@ public class CreateMatricula extends javax.swing.JInternalFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String [] params = new String[5];
-        params[0]=this.jTextField1.getText();
-        params[1]=this.jTextField2.getText();
-        params[2]=this.jTextField3.getText();
-        params[3]=this.jTextField5.getText();
-        params[4]=this.jTextField6.getText();
-        this.matriculaControl.crear(params);
+        try{
+        String [] args = new String[5];
+        args[0]=this.jTextField1.getText();
+        args[1]=this.jTextField2.getText();
+        args[2]=this.jTextField3.getText();
+        args[3]=this.jTextField5.getText();
+        args[4]=this.jTextField6.getText();
+        matriculaControl.crear(args);
         System.out.println("INFORMACIÓN GUARDADA CORRECTAMENTE");
-        JOptionPane.showMessageDialog(this, "Matricula guardada con éxito");
+        JOptionPane.showMessageDialog(this, "Matricula guardada con éxito","ATENCION"
+                ,JOptionPane.INFORMATION_MESSAGE);        
+        }catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Error al almacenar Matricula",JOptionPane.ERROR_MESSAGE); 
+        }
+        this.actualizarTable1();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -275,7 +283,7 @@ public class CreateMatricula extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTextField3ActionPerformed
 
     private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_jTextField5ActionPerformed
 
     private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed

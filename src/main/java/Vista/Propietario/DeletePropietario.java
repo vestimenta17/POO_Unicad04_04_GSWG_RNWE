@@ -224,12 +224,20 @@ public class DeletePropietario extends javax.swing.JInternalFrame {
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
+        try{
         String arg= this.jTextField1.getText();
         Propietario propietario = this.propietarioControl.buscarPropietario(arg);
         this.jTextField2.setText(String.valueOf(propietario.getNombrePropietario()));
         this.jTextField3.setText(String.valueOf(propietario.getFechaNacPropietario()));
         this.jTextField4.setText(String.valueOf(propietario.getNumeroVehiculosPropietario()));
         this.jComboBox1.setSelectedItem(String.valueOf(propietario.getTipoLicenciaPropietario()));
+         JOptionPane.showMessageDialog(this, "Propietario encontrado","ATENCION"
+                ,JOptionPane.INFORMATION_MESSAGE);        
+        }catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Error al encontrar Codigo",JOptionPane.ERROR_MESSAGE); 
+        }
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
@@ -246,10 +254,17 @@ public class DeletePropietario extends javax.swing.JInternalFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String arg;
-        arg=this.jTextField1.getText();
-        this.propietarioControl.eliminar(arg);
-        JOptionPane.showMessageDialog(this, "Propietario eliminado con éxito");   
+        try{
+            if(JOptionPane.showConfirmDialog(this, "Esta seguro que desea eliminar el registro",
+                    "ATENCION",JOptionPane.INFORMATION_MESSAGE)==0){
+                this.propietarioControl.eliminar(this.jTextField1.getText());
+                this.actualizarTable1();
+                JOptionPane.showMessageDialog(this, "Propietario eliminado satisfactoriamente",
+                        "ATENCION",JOptionPane.INFORMATION_MESSAGE);
+            }
+        }catch (Exception ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
+        }  
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

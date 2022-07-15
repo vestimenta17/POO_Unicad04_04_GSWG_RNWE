@@ -218,10 +218,17 @@ public class DeleteMatricula extends javax.swing.JInternalFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String arg;
-        arg=this.jTextField1.getText();
-        this.matriculaControl.eliminar(arg);
-        JOptionPane.showMessageDialog(this, "Matricula eliminada con éxito");
+        try{
+            if(JOptionPane.showConfirmDialog(this, "Esta seguro que desea eliminar el registro",
+                    "ATENCION",JOptionPane.INFORMATION_MESSAGE)==0){
+                this.matriculaControl.eliminar(this.jTextField1.getText());
+                this.actualizarTable1();
+                JOptionPane.showMessageDialog(this, "Propietario eliminado satisfactoriamente",
+                        "ATENCION",JOptionPane.INFORMATION_MESSAGE);
+            }
+        }catch (Exception ex){
+            JOptionPane.showMessageDialog(this, ex.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
+        }  
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -254,12 +261,20 @@ public class DeleteMatricula extends javax.swing.JInternalFrame {
     }
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
+        try{
         String arg= this.jTextField1.getText();
         Matricula matricula = this.matriculaControl.buscarMatricula(arg);
         this.jTextField2.setText(String.valueOf(matricula.getFechaMatricula()));
         this.jTextField3.setText(String.valueOf(matricula.getNumeroChasis()));
         this.jTextField5.setText(String.valueOf(matricula.getAuto().getCodigo()));
         this.jTextField6.setText(String.valueOf(matricula.getPropietario().getIdPropietario()));
+         JOptionPane.showMessageDialog(this, "Matricula encontrada","ATENCION"
+                ,JOptionPane.INFORMATION_MESSAGE);        
+        }catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Error al encontrar Codigo",JOptionPane.ERROR_MESSAGE); 
+        }
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed

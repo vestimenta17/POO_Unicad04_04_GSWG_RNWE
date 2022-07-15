@@ -244,7 +244,7 @@ public class CreateAuto extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
+        try{
         String [] args = new String[6];
         args[0]=this.jTextField1.getText();
         args[1]=this.jTextField3.getText();
@@ -254,7 +254,14 @@ public class CreateAuto extends javax.swing.JInternalFrame {
         args[5]=this.jTextField2.getText();
         this.autoControl.crear(args);
         System.out.println("INFORMACIÓN GUARDADA CORRECTAMENTE");
-        JOptionPane.showMessageDialog(this, "Auto guardado con éxito");
+        JOptionPane.showMessageDialog(this, "Auto guardado con éxito","ATENCION"
+                ,JOptionPane.INFORMATION_MESSAGE);        
+        }catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Error al almacenar Auto",JOptionPane.ERROR_MESSAGE); 
+        }
+        this.actualizarTable1();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed

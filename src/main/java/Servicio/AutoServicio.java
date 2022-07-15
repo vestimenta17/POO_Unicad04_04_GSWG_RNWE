@@ -12,7 +12,13 @@ public class AutoServicio implements IAutoServicio {
      
     @Override
     public Auto crear(Auto auto) {
-        this.autoList.add(auto);
+        var autoBuscado=this.buscarPorCodigo(auto.getCodigo());
+        if(autoBuscado==null){
+            this.autoList.add(auto);
+        }else{
+            throw new RuntimeException("El código ingresado ya se encuentra "
+                    + "asignado a la placa: "+autoBuscado.getPlaca());
+        }
         return auto;
     }
 

@@ -238,15 +238,23 @@ public class CreatePropietario extends javax.swing.JInternalFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String [] params = new String[5];
-        params[0]=this.jTextField1.getText();
-        params[1]=this.jTextField2.getText();
-        params[2]=this.jTextField3.getText();
-        params[3]=this.jTextField4.getText();
-        params[4]=this.jComboBox1.getSelectedItem().toString();
-        this.propietarioControl.crear(params);
+        try{
+        String [] args = new String[5];
+        args[0]=this.jTextField1.getText();
+        args[1]=this.jTextField2.getText();
+        args[2]=this.jTextField3.getText();
+        args[3]=this.jTextField4.getText();
+        args[4]=this.jComboBox1.getSelectedItem().toString();
+        propietarioControl.crear(args);
         System.out.println("INFORMACIÓN GUARDADA CORRECTAMENTE");
-        JOptionPane.showMessageDialog(this, "Propietario guardado con éxito");
+        JOptionPane.showMessageDialog(this, "Propietario guardado con éxito","ATENCION"
+                ,JOptionPane.INFORMATION_MESSAGE);        
+        }catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Error al almacenar Propietario",JOptionPane.ERROR_MESSAGE); 
+        }
+        this.actualizarTable1();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

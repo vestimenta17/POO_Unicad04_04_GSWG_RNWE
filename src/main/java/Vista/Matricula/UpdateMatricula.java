@@ -224,6 +224,7 @@ public class UpdateMatricula extends javax.swing.JInternalFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        try{
         String [] params = new String[5];
         params[0]=this.jTextField1.getText();
         params[1]=this.jTextField2.getText();
@@ -232,7 +233,14 @@ public class UpdateMatricula extends javax.swing.JInternalFrame {
         params[4]=this.jTextField6.getText();
         this.matriculaControl.crear(params);
         System.out.println("INFORMACIÓN GUARDADA CORRECTAMENTE");
-        JOptionPane.showMessageDialog(this, "Matricula modificada con éxito");
+         JOptionPane.showMessageDialog(this, "Matricula modificada con éxito","ATENCION"
+                ,JOptionPane.INFORMATION_MESSAGE);        
+        }catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Error al modificar Matricula",JOptionPane.ERROR_MESSAGE); 
+        }
+        this.actualizarTable1();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -265,12 +273,20 @@ public class UpdateMatricula extends javax.swing.JInternalFrame {
     }
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
+        try{
         String arg= this.jTextField1.getText();
         Matricula matricula = this.matriculaControl.buscarMatricula(arg);
         this.jTextField2.setText(String.valueOf(matricula.getFechaMatricula()));
         this.jTextField3.setText(String.valueOf(matricula.getNumeroChasis()));
         this.jTextField5.setText(String.valueOf(matricula.getAuto().getCodigo()));
         this.jTextField6.setText(String.valueOf(matricula.getPropietario().getIdPropietario()));
+         JOptionPane.showMessageDialog(this, "Matricula encontrada","ATENCION"
+                ,JOptionPane.INFORMATION_MESSAGE);        
+        }catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Error al encontrar Codigo",JOptionPane.ERROR_MESSAGE); 
+        }
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed

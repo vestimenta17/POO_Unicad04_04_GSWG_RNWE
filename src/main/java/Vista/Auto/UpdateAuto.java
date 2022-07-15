@@ -271,7 +271,7 @@ public class UpdateAuto extends javax.swing.JInternalFrame {
     }
         
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      
+      try{
         String [] params = new String[6];
         params[0]=this.jTextField1.getText();
         params[1]=this.jTextField3.getText();
@@ -280,7 +280,14 @@ public class UpdateAuto extends javax.swing.JInternalFrame {
         params[4]=this.jTextField5.getText();
         params[5]=this.jTextField2.getText();
         System.out.println("INFORMACIÓN GUARDADA CORRECTAMENTE");
-        JOptionPane.showMessageDialog(this, "Auto modificado con éxito");
+        JOptionPane.showMessageDialog(this, "Auto modificado con éxito","ATENCION"
+                ,JOptionPane.INFORMATION_MESSAGE);        
+        }catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Error al modificar Auto",JOptionPane.ERROR_MESSAGE); 
+        }
+        this.actualizarTable1();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
@@ -297,6 +304,7 @@ public class UpdateAuto extends javax.swing.JInternalFrame {
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
+        try{
         String arg= this.jTextField1.getText();
         Auto auto = this.autoControl.buscarAuto(arg);
         this.jTextField3.setText(String.valueOf(auto.getPlaca()));
@@ -304,6 +312,13 @@ public class UpdateAuto extends javax.swing.JInternalFrame {
         this.jTextField4.setText(String.valueOf(auto.getPrecio()));
         this.jTextField5.setText(String.valueOf(auto.getKilometraje()));
         this.jTextField2.setText(String.valueOf(auto.getModelo()));
+        JOptionPane.showMessageDialog(this, "Auto enontrado","ATENCION"
+                ,JOptionPane.INFORMATION_MESSAGE);        
+        }catch(Exception ex)
+        {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                        "Error al buscar codigo",JOptionPane.ERROR_MESSAGE); 
+        }
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed

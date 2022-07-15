@@ -13,11 +13,17 @@ public class MatriculaServicio implements IMatriculaServicio {
      
      @Override
     public Matricula crear(Matricula matricula) {
-        this.matriculaList.add(matricula);
+        var matriculaBuscado=this.buscarPorCod(matricula.getNumero());
+        if(matriculaBuscado==null){
+            this.matriculaList.add(matricula);
+        }else{
+            throw new RuntimeException("El código ingresado ya se encuentra "
+                    + "asignado al chasis: "+matriculaBuscado.getNumeroChasis());
+        }
         return matricula;
     }
 
-     @Override
+    @Override
     public List<Matricula> listar() {
         return this.matriculaList;
     }
