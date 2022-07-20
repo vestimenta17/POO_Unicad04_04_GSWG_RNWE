@@ -18,4 +18,6 @@ interface IAutoServicio {
     public Auto eliminar(int codigo);
     public Auto buscarPorCodigo(int codigo);
     public int buscarPosicion(Auto auto);
+    public boolean almacenarEnArchivo(Auto auto, String rutaArchivo) throws Exception;
+    public List<Auto> recuperarDeArchivo(String rutaArchivo) throws Exception;
 }

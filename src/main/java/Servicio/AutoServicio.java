@@ -4,8 +4,15 @@
  */
 package Servicio;
 import Modelo.Auto;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AutoServicio implements IAutoServicio {
     private static List<Auto> autoList = new ArrayList<>();
@@ -19,11 +26,22 @@ public class AutoServicio implements IAutoServicio {
             throw new RuntimeException("El código ingresado ya se encuentra "
                     + "asignado a la placa: "+autoBuscado.getPlaca());
         }
+        try {
+            this.almacenarEnArchivo(auto, "C:/carpeta1/archivoAuto.obj");
+        } catch (Exception ex) {
+            throw new RuntimeException("El barco no se pudo almacenar en el "
+                    + "archivo de objetos"+ex.getMessage());
+        }
         return auto;
     }
 
      @Override
     public List<Auto> listar() {
+        try {
+            this.autoList=this.recuperarDeArchivo("C:/carpeta1/archivoAuto.obj");
+        } catch (Exception ex) {
+            Logger.getLogger(AutoServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return this.autoList;
     }
     @Override
@@ -67,5 +85,40 @@ public class AutoServicio implements IAutoServicio {
             }
         }
         return posicion;
+    }
+    @Override
+    public boolean almacenarEnArchivo(Auto auto, String rutaArchivo) throws Exception {
+        ObjectOutputStream salida=null;
+        var retorno=false;
+        try{
+            salida = new ObjectOutputStream(new FileOutputStream(new File(rutaArchivo),true));
+            salida.writeObject(auto);
+            salida.close();
+            retorno=true;
+        }catch(Exception e1){
+            System.out.println(e1.toString());
+            salida.close();
+        }
+        return retorno;
+    }
+
+    @Override
+    public List<Auto> recuperarDeArchivo(String rutaArchivo) throws Exception {
+        
+        var autoList = new ArrayList<Auto>();
+        var fis = new FileInputStream(new File(rutaArchivo));
+        ObjectInputStream entrada = null;
+        try{        
+            while(fis.available()>0){
+                entrada = new ObjectInputStream(fis);
+                Auto auto = (Auto) entrada.readObject();
+                autoList.add(auto);
+            }
+            entrada.close();
+        }catch(Exception ex){
+            entrada.close();
+        }
+        return autoList;
+        
     }
 }

@@ -14,4 +14,6 @@ interface IMatriculaServicio {
     public Matricula eliminar(int codigoMatricula);
     public Matricula buscarPorCod(int codigoMatricula);
     public int buscarPosicion(Matricula matricula);
+    public boolean almacenarEnArchivo(Matricula matricula, String rutaArchivo) throws Exception;
+    public List<Matricula> recuperarDeArchivo(String rutaArchivo) throws Exception;
 }

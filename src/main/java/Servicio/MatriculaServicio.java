@@ -4,6 +4,13 @@
  */
 package Servicio;
 import Modelo.Matricula;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +27,21 @@ public class MatriculaServicio implements IMatriculaServicio {
             throw new RuntimeException("El código ingresado ya se encuentra "
                     + "asignado al chasis: "+matriculaBuscado.getNumeroChasis());
         }
+        try {
+            this.almacenarEnArchivo(matricula, "C:/carpeta1/archivoMatricula.dat");
+        } catch (Exception ex) {
+            throw new RuntimeException("No se puede almacenar en archivo"+ex.getMessage());
+        }
         return matricula;
     }
 
     @Override
     public List<Matricula> listar() {
+        try {
+            this.matriculaList=this.recuperarDeArchivo("C:/carpeta1/archivoMatricula.dat");
+        } catch (Exception ex) {
+            throw new RuntimeException("No se puede recuperar de archivo"+ex.getMessage());
+        }
         return this.matriculaList;
     }
     @Override
@@ -66,6 +83,40 @@ public class MatriculaServicio implements IMatriculaServicio {
             }
         }
         return posicion;
+    }
+    @Override
+    public boolean almacenarEnArchivo(Matricula matricula, String rutaArchivo) throws Exception{
+        var retorno = false;
+        ObjectOutputStream salida=null;
+        try{
+            salida = new ObjectOutputStream( new FileOutputStream(rutaArchivo,true) );
+            salida.writeInt(matricula.getNumero());
+            salida.writeInt(matricula.getNumeroChasis());
+            salida.close();
+            retorno=true;
+        }catch(IOException e)
+        {
+            salida.close();
+        }
+        return retorno;
+    }
+
+    @Override
+    public List<Matricula> recuperarDeArchivo(String rutaArchivo) throws Exception {
+        var matriculaList = new ArrayList<Matricula>();
+        ObjectInputStream entrada=null;
+        try{
+            entrada = new ObjectInputStream(new FileInputStream(rutaArchivo));
+            while(true){
+                var numero=entrada.readInt();
+                var numeroChasis=entrada.readInt();
+                var matricula = new Matricula(numero,fechaMatricula,numeroChasis);
+                matriculaList.add(matricula);
+            }
+        }catch(IOException e){
+            entrada.close();
+        }
+        return matriculaList;
     }
 
 }
