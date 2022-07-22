@@ -7,7 +7,7 @@ package Servicio;
 import java.util.List;
 import Modelo.Matricula;
 
-interface IMatriculaServicio {
+public interface IMatriculaServicio {
     public Matricula crear(Matricula matricula);
     public List<Matricula> listar();
     public Matricula modificar(int codigoMatricula, Matricula matriculaNuevo);

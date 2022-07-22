@@ -7,11 +7,8 @@ package Servicio;
 import java.util.List;
 import Modelo.Auto;
 
-/**
- *
- * @author User
- */
-interface IAutoServicio {
+
+public interface IAutoServicio {
     public Auto crear(Auto auto);
     public List<Auto> listar();
     public Auto modificar(int codigo, Auto autoNuevo);

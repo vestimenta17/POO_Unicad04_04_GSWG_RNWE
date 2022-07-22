@@ -4,21 +4,21 @@
  */
 package Servicio;
 import Modelo.Matricula;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class MatriculaServicio implements IMatriculaServicio {
     private static List<Matricula> matriculaList = new ArrayList<>();
      
-     @Override
+    @Override
     public Matricula crear(Matricula matricula) {
         var matriculaBuscado=this.buscarPorCod(matricula.getNumero());
         if(matriculaBuscado==null){
@@ -28,9 +28,10 @@ public class MatriculaServicio implements IMatriculaServicio {
                     + "asignado al chasis: "+matriculaBuscado.getNumeroChasis());
         }
         try {
-            this.almacenarEnArchivo(matricula, "C:/carpeta1/archivoMatricula.dat");
+            this.almacenarEnArchivo(matricula, "C:/carpeta1/archivoMatricula.obj");
         } catch (Exception ex) {
-            throw new RuntimeException("No se puede almacenar en archivo"+ex.getMessage());
+            throw new RuntimeException("La matricula no se pudo almacenar en el "
+                    + "archivo de objetos"+ex.getMessage());
         }
         return matricula;
     }
@@ -38,9 +39,9 @@ public class MatriculaServicio implements IMatriculaServicio {
     @Override
     public List<Matricula> listar() {
         try {
-            this.matriculaList=this.recuperarDeArchivo("C:/carpeta1/archivoMatricula.dat");
+            this.matriculaList=this.recuperarDeArchivo("C:/carpeta1/archivoMatricula.obj");
         } catch (Exception ex) {
-            throw new RuntimeException("No se puede recuperar de archivo"+ex.getMessage());
+            Logger.getLogger(MatriculaServicio.class.getName()).log(Level.SEVERE, null, ex);
         }
         return this.matriculaList;
     }
@@ -86,16 +87,15 @@ public class MatriculaServicio implements IMatriculaServicio {
     }
     @Override
     public boolean almacenarEnArchivo(Matricula matricula, String rutaArchivo) throws Exception{
-        var retorno = false;
         ObjectOutputStream salida=null;
+        var retorno=false;
         try{
-            salida = new ObjectOutputStream( new FileOutputStream(rutaArchivo,true) );
-            salida.writeInt(matricula.getNumero());
-            salida.writeInt(matricula.getNumeroChasis());
+            salida = new ObjectOutputStream(new FileOutputStream(new File(rutaArchivo),true));
+            salida.writeObject(matricula);
             salida.close();
             retorno=true;
-        }catch(IOException e)
-        {
+        }catch(Exception e1){
+            System.out.println(e1.toString());
             salida.close();
         }
         return retorno;
@@ -104,16 +104,16 @@ public class MatriculaServicio implements IMatriculaServicio {
     @Override
     public List<Matricula> recuperarDeArchivo(String rutaArchivo) throws Exception {
         var matriculaList = new ArrayList<Matricula>();
-        ObjectInputStream entrada=null;
-        try{
-            entrada = new ObjectInputStream(new FileInputStream(rutaArchivo));
-            while(true){
-                var numero=entrada.readInt();
-                var numeroChasis=entrada.readInt();
-                var matricula = new Matricula(numero,fechaMatricula,numeroChasis);
+        var fis = new FileInputStream(new File(rutaArchivo));
+        ObjectInputStream entrada = null;
+        try{        
+            while(fis.available()>0){
+                entrada = new ObjectInputStream(fis);
+                Matricula matricula = (Matricula) entrada.readObject();
                 matriculaList.add(matricula);
             }
-        }catch(IOException e){
+            entrada.close();
+        }catch(Exception ex){
             entrada.close();
         }
         return matriculaList;

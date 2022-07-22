@@ -4,17 +4,19 @@
  */
 package Modelo;
 
+import java.io.Serializable;
+
 /**
  *
  * @author HP
  */
-public class Auto {
-    int codigo;
-    String placa;
-    String marca;
-    int precio;
-    int kilometraje;
-    String modelo;
+public class Auto implements Serializable{
+    private int codigo;
+    private String placa;
+    private String marca;
+    private int precio;
+    private int kilometraje;
+    private String modelo;
 
     public Auto(int codigo, String placa, String marca, int precio, 
             int kilometraje, String modelo) {

@@ -4,15 +4,13 @@
  */
 package Servicio;
 import Modelo.Auto;
-import java.io.File;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class AutoServicio implements IAutoServicio {
     private static List<Auto> autoList = new ArrayList<>();
@@ -27,23 +25,22 @@ public class AutoServicio implements IAutoServicio {
                     + "asignado a la placa: "+autoBuscado.getPlaca());
         }
         try {
-            this.almacenarEnArchivo(auto, "C:/carpeta1/archivoAuto.obj");
+            this.almacenarEnArchivo(auto, "C:/carpeta1/archivoAuto.dat");
         } catch (Exception ex) {
-            throw new RuntimeException("El barco no se pudo almacenar en el "
-                    + "archivo de objetos"+ex.getMessage());
+            throw new RuntimeException("Auto No se puede almacenar en archivo"+ex.getMessage());
         }
         return auto;
     }
 
-     @Override
     public List<Auto> listar() {
         try {
-            this.autoList=this.recuperarDeArchivo("C:/carpeta1/archivoAuto.obj");
+            this.autoList=this.recuperarDeArchivo("C:/carpeta1/archivoAuto.dat");
         } catch (Exception ex) {
-            Logger.getLogger(AutoServicio.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException("No se puede recuperar de archivo"+ex.getMessage());
         }
         return this.autoList;
     }
+    
     @Override
     public Auto buscarPorCodigo(int codigo) {
         Auto auto=null;
@@ -72,6 +69,11 @@ public class AutoServicio implements IAutoServicio {
         Auto auto=this.buscarPorCodigo(codigo);
         var posicion=this.buscarPosicion(auto);
         this.listar().remove(posicion);
+        try {
+            this.almacenarEnArchivo(auto, "C:/carpeta1/archivoAuto.dat");
+        } catch (Exception ex) {
+            throw new RuntimeException("Auto No se puede almacenar en archivo"+ex.getMessage());
+        }
         return auto;
     }
 
@@ -87,38 +89,47 @@ public class AutoServicio implements IAutoServicio {
         return posicion;
     }
     @Override
-    public boolean almacenarEnArchivo(Auto auto, String rutaArchivo) throws Exception {
-        ObjectOutputStream salida=null;
-        var retorno=false;
+    public boolean almacenarEnArchivo(Auto auto, String rutaArchivo) throws Exception{
+        var retorno = false;
+        DataOutputStream salida=null;
         try{
-            salida = new ObjectOutputStream(new FileOutputStream(new File(rutaArchivo),true));
-            salida.writeObject(auto);
+            salida = new DataOutputStream( new FileOutputStream(rutaArchivo,true) );
+            salida.writeInt(auto.getCodigo());
+            salida.writeUTF(auto.getPlaca());
+            salida.writeUTF(auto.getMarca());
+            salida.writeInt(auto.getPrecio());
+            salida.writeInt(auto.getKilometraje());
+            salida.writeUTF(auto.getModelo());
             salida.close();
             retorno=true;
-        }catch(Exception e1){
-            System.out.println(e1.toString());
+        }catch(IOException e)
+        {
             salida.close();
         }
         return retorno;
     }
 
+
     @Override
     public List<Auto> recuperarDeArchivo(String rutaArchivo) throws Exception {
-        
         var autoList = new ArrayList<Auto>();
-        var fis = new FileInputStream(new File(rutaArchivo));
-        ObjectInputStream entrada = null;
-        try{        
-            while(fis.available()>0){
-                entrada = new ObjectInputStream(fis);
-                Auto auto = (Auto) entrada.readObject();
+        DataInputStream entrada=null;
+        try{
+            entrada = new DataInputStream(new FileInputStream(rutaArchivo));
+            while(true){
+                var codigo=entrada.readInt();
+                var placa=entrada.readUTF();
+                var marca=entrada.readUTF();
+                var precio=entrada.readInt();
+                var kilometraje=entrada.readInt();
+                var modelo=entrada.readUTF();
+                var auto = new Auto(codigo,placa,marca,precio,kilometraje,modelo);
                 autoList.add(auto);
             }
-            entrada.close();
-        }catch(Exception ex){
+        }catch(IOException e){
             entrada.close();
         }
         return autoList;
-        
     }
 }
+

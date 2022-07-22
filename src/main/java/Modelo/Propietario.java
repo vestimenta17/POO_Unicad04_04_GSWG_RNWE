@@ -4,18 +4,19 @@
  */
 package Modelo;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
  *
  * @author HP
  */
-public class Propietario {
-    int idPropietario;
-    String nombrePropietario;
-    LocalDate fechaNacPropietario;
-    int numeroVehiculosPropietario;
-    String tipoLicenciaPropietario;
+public class Propietario implements java.io.Serializable{
+    private int idPropietario;
+    private String nombrePropietario;
+    private LocalDate fechaNacPropietario;
+    private int numeroVehiculosPropietario;
+    private String tipoLicenciaPropietario;
     
     public Propietario(int idPropietario, String nombrePropietario, 
             LocalDate fechaNacPropietario, int numeroVehiculosPropietario, 

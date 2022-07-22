@@ -5,8 +5,15 @@
 package Servicio;
 
 import Modelo.Propietario;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PropietarioServicio implements IPropietarioServicio {
 
@@ -21,11 +28,22 @@ public class PropietarioServicio implements IPropietarioServicio {
             throw new RuntimeException("El código ingresado ya se encuentra "
                     + "asignado a: "+propietarioBuscado.getNombrePropietario());
         }
+        try {
+            this.almacenarEnArchivo(propietario, "C:/carpeta1/archivoPropietario.obj");
+        } catch (Exception ex) {
+            throw new RuntimeException("El propietario no se pudo almacenar en el "
+                    + "archivo de objetos"+ex.getMessage());
+        }
         return propietario;
     }
-
+    
     @Override
     public List<Propietario> listar() {
+        try {
+            this.propietarioList=this.recuperarDeArchivo("C:/carpeta1/archivoPropietario.obj");
+        } catch (Exception ex) {
+            Logger.getLogger(PropietarioServicio.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return this.propietarioList;
     } 
 
@@ -36,6 +54,12 @@ public class PropietarioServicio implements IPropietarioServicio {
         this.listar().get(posicion).setFechaNacPropietario(propietarioNuevo.getFechaNacPropietario());
         this.listar().get(posicion).setNumeroVehiculosPropietario(propietarioNuevo.getNumeroVehiculosPropietario());
         this.listar().get(posicion).setTipoLicenciaPropietario(propietarioNuevo.getTipoLicenciaPropietario());
+        try {
+            this.almacenarEnArchivo(propietarioNuevo, "C:/carpeta1/archivoPropietario.obj");
+        } catch (Exception ex) {
+            throw new RuntimeException("El propietario no se pudo almacenar en el "
+                    + "archivo de objetos"+ex.getMessage());
+        }
         return propietarioNuevo;
     }
 
@@ -70,5 +94,38 @@ public class PropietarioServicio implements IPropietarioServicio {
             }
         }
         return posicion;
+    }
+    @Override
+    public boolean almacenarEnArchivo(Propietario propietario, String rutaArchivo) throws Exception{
+        ObjectOutputStream salida=null;
+        var retorno=false;
+        try{
+            salida = new ObjectOutputStream(new FileOutputStream(new File(rutaArchivo),true));
+            salida.writeObject(propietario);
+            salida.close();
+            retorno=true;
+        }catch(Exception e1){
+            System.out.println(e1.toString());
+            salida.close();
+        }
+        return retorno;
+    }
+
+    @Override
+    public List<Propietario> recuperarDeArchivo(String rutaArchivo) throws Exception {
+        var propietarioList = new ArrayList<Propietario>();
+        var fis = new FileInputStream(new File(rutaArchivo));
+        ObjectInputStream entrada = null;
+        try{        
+            while(fis.available()>0){
+                entrada = new ObjectInputStream(fis);
+                Propietario propietario = (Propietario) entrada.readObject();
+                propietarioList.add(propietario);
+            }
+            entrada.close();
+        }catch(Exception ex){
+            entrada.close();
+        }
+        return propietarioList;
     }
 }

@@ -6,12 +6,12 @@ package Modelo;
 
 import java.time.LocalDate;
 
-public class Matricula {
-    int numero;
-    LocalDate fechaMatricula;
-    int numeroChasis;
-    Auto auto;
-    Propietario propietario;
+public class Matricula implements java.io.Serializable{
+    private int numero;
+    private LocalDate fechaMatricula;
+    private int numeroChasis;
+    private Auto auto;
+    private Propietario propietario;
 
     public Matricula(int numero, LocalDate fechaMatricula, int numeroChasis, 
             Auto auto, Propietario propietario) {
